@@ -1,0 +1,42 @@
+  name: DEPLOY_ON_
+
+  on:
+    pull_request:
+      branches: [main, develop]
+      types: [closed]
+  permissions: write-all
+
+  jobs:
+    deploy:
+      if: github.event.pull-request.merged == true
+      runs-on: ubuntu/latest
+      steps:
+        # 1. source checkout!
+        - name: source checkout
+          uses: actions/checkout@v4
+
+        # 2. set up jdk
+        - name: Set up JDK
+          uses: actions/setup-java@v4
+          with:
+            java-version: 17
+
+        # 3. configure build environment
+        - name: configure build environment
+          id: configure-env
+          run : |
+            if [ "${{ github.ref }}" = "refs/heads/develop" ]; then
+              echo "environment=dev" >> $GITHUB_OUTPUT
+              echo "FIREBASE_CHANNEL=dev" >> $GITHUB_OUTPUT
+            else
+              echo "environment=prod" >> $GITHUB_OUTPUT
+              echo "FIREBASE_CHANNEL=live" >> $GITHUB_OUTPUT
+            fi
+
+        # 4. gradlew 권한 설정
+        - name: grant gradlew
+          run: chmod +x gradlew
+
+        # 5. gradlew 실행
+        - name: execute gradlew
+          run: ./gradlew gradlew build
