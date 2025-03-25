@@ -41,4 +41,4 @@
           run: ./gradlew bootJar
 
         - name: App Engine에 배포
-          run: gcloud app deploy --quiet
+          run: gcloud app deploy --stop-previous-version --quiet
