@@ -4,6 +4,8 @@
     pull_request:
       branches: [develop]
       types: [closed]
+    workflow_dispatch:
+
   permissions: write-all
 
   jobs:
