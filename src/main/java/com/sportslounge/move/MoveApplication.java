@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class MoveApplication {
 
+	//test choo
 	public static void main(String[] args) {
 		SpringApplication.run(MoveApplication.class, args);
 	}
