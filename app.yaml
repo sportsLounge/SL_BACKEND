@@ -1,3 +1,5 @@
+# Google Cloud Platform 배포 설정 파일
+
 runtime: java17
 instance_class: F1 # 공짜 인스턴스 or B1
 

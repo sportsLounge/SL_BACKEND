@@ -1,12 +1,14 @@
   name: DEPLOY_DEV_ON_GCP_APP_ENGINE
 
   on:
-    push:
+    pull_request:
       branches: [develop]
+      types: [closed]
   permissions: write-all
 
   jobs:
     deploy:
+      if: github.event.pull-request.merged == true
       runs-on: ubuntu-latest
 
       steps:
