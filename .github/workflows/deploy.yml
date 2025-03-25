@@ -1,42 +1,44 @@
-  name: DEPLOY_ON_
+  name: DEPLOY_DEV_ON_GCP_APP_ENGINE
 
   on:
-    pull_request:
-      branches: [main, develop]
-      types: [closed]
+    push:
+      branches: [develop]
   permissions: write-all
 
   jobs:
     deploy:
-      if: github.event.pull-request.merged == true
-      runs-on: ubuntu/latest
+      runs-on: ubuntu-latest
+
       steps:
-        # 1. source checkout!
-        - name: source checkout
+        - name: 저장소 체크아웃
           uses: actions/checkout@v4
 
-        # 2. set up jdk
-        - name: Set up JDK
+        - name: Java 17 설정
           uses: actions/setup-java@v4
           with:
-            java-version: 17
+            java-version: '17'
+            distribution: 'temurin'
 
-        # 3. configure build environment
-        - name: configure build environment
-          id: configure-env
-          run : |
-            if [ "${{ github.ref }}" = "refs/heads/develop" ]; then
-              echo "environment=dev" >> $GITHUB_OUTPUT
-              echo "FIREBASE_CHANNEL=dev" >> $GITHUB_OUTPUT
-            else
-              echo "environment=prod" >> $GITHUB_OUTPUT
-              echo "FIREBASE_CHANNEL=live" >> $GITHUB_OUTPUT
-            fi
+        - name: Google Cloud 인증
+          uses: google-github-actions/auth@v2
+          with:
+            credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-        # 4. gradlew 권한 설정
-        - name: grant gradlew
-          run: chmod +x gradlew
+        - name: Google Cloud SDK 설정
+          run: |
+            curl -sSL https://sdk.cloud.google.com | bash
+            echo "source ~/google-cloud-sdk/path.bash.inc" >> ~/.bashrc
+            source ~/.bashrc
+            gcloud version
 
-        # 5. gradlew 실행
-        - name: execute gradlew
-          run: ./gradlew gradlew build
+        - name: GCP 프로젝트 설정
+          run: gcloud config set project ${{ secrets.GCP_PROJECT_ID }}
+
+        - name: Gradle 실행 권한 부여
+          run: chmod +x ./gradlew
+
+        - name: Spring Boot 애플리케이션 빌드
+          run: ./gradlew bootJar
+
+        - name: App Engine에 배포
+          run: gcloud app deploy --quiet
