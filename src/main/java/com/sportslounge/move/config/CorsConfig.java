@@ -14,7 +14,9 @@ public class CorsConfig {
 	corsConfig.addAllowedOrigin("*");
 	corsConfig.addAllowedHeader("*");
 	corsConfig.addAllowedMethod("*");
-	corsConfig.setAllowCredentials(true);
+	
+	/* allow origin "*" 과 공존할 수 없는 옵션 */
+	//	corsConfig.setAllowCredentials(true);
 
 	UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 	source.registerCorsConfiguration("/**", corsConfig);
