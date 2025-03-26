@@ -10,7 +10,3 @@ handlers:
   - url: /.*
     script: auto
     secure: always
-# gcp console 의 secret manager 에 설정 되어 있는 비밀 값
-env_variables:
-  SUPABASE_DB_USERNAME: ${sm://projects/788504216743/secrets/SUPABASE_DB_USERNAME/versions/latest}
-  SUPABASE_DB_PASSWORD: ${sm://projects/788504216743/secrets/SUPABASE_DB_PASSWORD/versions/latest}
