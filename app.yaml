@@ -10,3 +10,7 @@ handlers:
   - url: /.*
     script: auto
     secure: always
+
+env_variables:
+  SUPABASE_DB_USERNAME: SUPABASE_DB_USERNAME_PLACEHOLDER
+  SUPABASE_DB_PASSWORD: SUPABASE_DB_PASSWORD_PLACEHOLDER
