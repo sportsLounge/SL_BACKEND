@@ -44,5 +44,11 @@
         - name: Spring Boot 애플리케이션 빌드
           run: ./gradlew bootJar
 
+        - name: Update app.yaml with github secrets
+          run: |
+            echo "Updating app.yaml with environment variables using github secrets ..."
+            sed -i 's|SUPABASE_DB_USERNAME|'${{ secrets.SUPABASE_DB_USERNAME }}'|g' app.yaml
+            sed -i 's|SUPABASE_DB_PASSWORD|'${{ secrets.SUPABASE_DB_PASSWORD }}'|g' app.yaml
+
         - name: App Engine에 배포
           run: gcloud app deploy --stop-previous-version --quiet
