@@ -44,14 +44,13 @@
         - name: Spring Boot 애플리케이션 빌드
           run: ./gradlew bootJar
 
-        - name: Update app.yaml with github secrets
+        - name: Update app.yaml with GitHub secrets
           run: |
-            echo "Updating app.yaml with environment variables using github secrets ..."
-          # GitHub secrets 값을 환경 변수로 설정
+            echo "Updating app.yaml with environment variables using GitHub secrets ..."
+
             export SUPABASE_DB_USERNAME=${{ secrets.SUPABASE_DB_USERNAME }}
             export SUPABASE_DB_PASSWORD=${{ secrets.SUPABASE_DB_PASSWORD }}
-            
-          # 환경 변수 값을 사용하는 sed 명령으로 app.yaml 수정
+      
             sed -i 's|SUPABASE_DB_USERNAME_PLACEHOLDER|'"$SUPABASE_DB_USERNAME"'|g' app.yaml
             sed -i 's|SUPABASE_DB_PASSWORD_PLACEHOLDER|'"$SUPABASE_DB_PASSWORD"'|g' app.yaml
 
