@@ -45,4 +45,4 @@
           run: ./gradlew bootJar
 
         - name: App Engine에 배포
-          run: gcloud app deploy --stop-previous-version --quiet
+          run: gcloud app deploy --stop-previous-version --quiet --set-env-vars SUPABASE_DB_USERNAME=${{ secrets.SUPABASE_DB_USERNAME }},SUPABASE_DB_PASSWORD=${{ secrets.SUPABASE_DB_PASSWORD }}
