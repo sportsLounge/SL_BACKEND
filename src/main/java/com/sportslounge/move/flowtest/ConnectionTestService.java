@@ -2,19 +2,25 @@ package com.sportslounge.move.flowtest;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ConnectionTestService {
 	ConnectionTestRepository connectionTestRepository;
+
 	ConnectionTestService (ConnectionTestRepository connectionTestRepository) {
 		this.connectionTestRepository = connectionTestRepository;
 	}
-
-	public List<ConnectionTestEntity> connectionTest () {
+	@Transactional
+	public List<ConnectionTestEntity> findTest() {
 	  return connectionTestRepository.findAll();
 	}
-
+	@Transactional
 	public ConnectionTestEntity insertTest (ConnectionTestEntity entity) {
 	  return connectionTestRepository.save(entity);
+	}
+	@Transactional
+	public void deleteTest (String name) {
+		connectionTestRepository.deleteByName(name);
 	}
 }

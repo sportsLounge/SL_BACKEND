@@ -1,37 +1,46 @@
 package com.sportslounge.move.flowtest;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.List;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/connection")
 public class RestTestController {
-  ConnectionTestService connectionTestService;
-  RestTestController (ConnectionTestService connectionTestService) {
-	this.connectionTestService = connectionTestService;
-  }
-	@GetMapping("/test")
-  	public ResponseEntity<Map<String, Object>> tMethod() {
-	  Map<String, Object> response = new HashMap<>();
-	  response.put("result",connectionTestService.connectionTest());
-	  return ResponseEntity.ok(response);
+  	ConnectionTestService connectionTestService;
+
+   	RestTestController (ConnectionTestService connectionTestService) {
+	 this.connectionTestService = connectionTestService;
+   	}
+
+	@Operation(summary = "TEST_GET" , description = "GET Request 연결 테스트용", responses = {
+		@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json"))
+	})
+  	@GetMapping("/test")
+  	public ResponseEntity<List<ConnectionTestEntity>> tMethod() {
+	  return ResponseEntity.ok().body(connectionTestService.findTest());
 	}
 
+	@Operation(summary = "TEST_POST" , description = "POST Request 연결 테스트용", responses = {
+		@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json"))
+	})
 	@PostMapping("/test")
-  	public ResponseEntity<Map<String,String>> insert (@RequestBody ConnectionTestEntity entity) {
-		Map<String, String> response = new HashMap<>();
+  	public ResponseEntity<ConnectionTestEntity> insert (@Valid @RequestBody ConnectionTestEntity entity) {
+		return ResponseEntity.ok().body(connectionTestService.insertTest(entity));
+	}
 
-		response.put("result", Objects.nonNull(entity) ? "success" : "fail");
-
-		if(Objects.nonNull(entity)) connectionTestService.insertTest(entity);
-
-		return ResponseEntity.ok(response);
+	@Operation(summary = "TEST DELETE", description = "DELETE Request 연결 테스트용", responses = {
+		@ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json"))
+	})
+	@DeleteMapping("/test")
+	public ResponseEntity<Integer> delete (@Parameter(name = "name", required = true) @RequestParam("name") String name) {
+		connectionTestService.deleteTest(name);
+		return ResponseEntity.ok(200);
 	}
 }

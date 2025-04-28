@@ -51,9 +51,7 @@ dependencies {
 	//runtimeOnly 'com.mysql:mysql-connector-j'
 
 	// swagger
-	implementation 'com.spring4all:swagger-spring-boot-starter:1.9.1.RELEASE'
-	compile("io.swagger:swagger-annotations:1.6.2")
-	compile("io.swagger:swagger-models:1.6.2")
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
 	// log4j
 	implementation 'org.apache.logging.log4j:log4j-api:2.17.1'
