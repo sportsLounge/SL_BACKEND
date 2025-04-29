@@ -1,4 +1,4 @@
-package com.sportslounge.move.flowtest;
+package com.sportslounge.move.connectiontest;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

@@ -3,6 +3,12 @@ spring:
     active: ${ACTIVE_PROFILE}
   application:
     name: move
+  # swagger - spring docs
+  spring-doc:
+    api-docs:
+      path: /v3/api-docs
+    swagger-ui:
+      path: /swagger-ui.html
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres
@@ -14,14 +20,13 @@ spring:
       connectionTimeout: 30000
       leakDetectionThreshold: 15000
       connectionTestQuery: SELECT 1
-    # hibernate
+  # jpa
+  jpa:
     hibernate:
       ddl-auto: update
       database-platform: org.hibernate.dialect.PostgreSQLDialect
-      show-sql: true
-    # swagger - spring docs
-    springdoc:
-      api-docs:
-        path: /api-docs
-      swagger-ui:
-        path: /swagger-ui
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true

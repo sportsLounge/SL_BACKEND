@@ -1,4 +1,4 @@
-package com.sportslounge.move.flowtest;
+package com.sportslounge.move.connectiontest;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

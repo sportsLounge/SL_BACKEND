@@ -12,8 +12,8 @@ import lombok.ToString;
 @ToString
 @Table(name = "member")
 public class AuthEntity {
-  @Id@GeneratedValue
-  private String id;
+  @Id
+  private Integer id;
   @JsonProperty("userId")
   @Column(name = "user_id")
   private String userId;
