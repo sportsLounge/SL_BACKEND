@@ -4,32 +4,21 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(value = "/auth", produces = "application/json")
 public class LoginController {
 
-  LoginService loginService;
+  private final LoginService loginService;
 
-  LoginController (LoginService loginService) {
-    this.loginService = loginService;
-  }
-
-  @Operation(summary = "AUTH_GET", description = "세션 생성용", responses = {
+  @Operation(summary = "AUTH_KAKAO_CODE", description = "카카오 인가 코드", responses = {
     @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json"))
   })
-  @GetMapping
-  public ResponseEntity<Object> setSession (@Valid @RequestParam String userId) {
-    return ResponseEntity.ok().body(loginService.setSession(userId));
-  }
-
-  @Operation(summary = "AUTH_POST", description = "계정 가입", responses = {
-    @ApiResponse(responseCode = "200", content = @Content(mediaType = "application/json"))
-  })
-  @PostMapping
-  public ResponseEntity<Object> join () {
-    return ResponseEntity.ok().body("succeed");
+  @GetMapping("/kakaoLogin")
+  public ResponseEntity<Object> kakaoLogin () {
+    return ResponseEntity.ok().body(loginService.authTokenKakao());
   }
 }

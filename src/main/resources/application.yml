@@ -30,3 +30,11 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
+# kakao
+kakao:
+  auth:
+    base-host: https://kauth.kakao.com
+    api-key : ${KAKAO_REST_API_KEY}
+logging:
+  level:
+    reactor.netty.http.client: DEBUG
