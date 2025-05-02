@@ -1,7 +1,9 @@
 package com.sportslounge.move.auth;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
 @Service
@@ -19,15 +21,27 @@ public class LoginService {
     return authRepository.findByUserId(userId);
   }
 
-  public Object authTokenKakao () {
-    return webClient.get()
-        .uri(uriBuilder -> uriBuilder
-            .path("TBD...")
-            .queryParam("client_id", kakao_api_key)
-            .build()
-        )
+  public String kakaoLogin (String authCode) {
+    String authToken = getKakaoAuthToken(authCode);
+
+    return authToken;
+  }
+
+  private String getKakaoAuthToken (String authCode) {
+
+    BodyInserters.FormInserter<String> param =  BodyInserters.fromFormData("grant_type","authorization_code")
+      .with("client_id",kakao_api_key)
+      .with("redirect_uri","https://localhost:3000/auth/redirection")
+      .with("code",authCode);
+
+    return webClient.post()
+        .uri(uriBuilder -> uriBuilder.path("/oauth/token").build())
+        .header("Content-Type","application/x-www-form-urlencoded;charset=utf-8")
+        .body(param)
         .retrieve()
-        .onStatus(status -> true, response -> response.bodyToMono(String.class).map(body -> new RuntimeException("성공케이스!! >> \n"+body)))
+        .onStatus(HttpStatusCode::is4xxClientError, response ->
+           response.bodyToMono(String.class).map(body -> new RuntimeException("400 Error >>>>>>> \n" + body))
+        )
         .bodyToMono(String.class)
         .block();
   }
